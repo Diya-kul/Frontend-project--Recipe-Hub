@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>World Famous Food Stores</title>
+
+        <style>
+            body{
+            margin:0;
+            font-family:sans-serif;
+            background:#eef7ff;
+            }
+
+            /* NAVBAR */
+            .navbar{
+            display:flex;
+            justify-content:space-between;
+            padding:15px 25px;
+            background:#fff;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            /* HEADER */
+            .header{
+            text-align:center;
+            padding:40px 20px;
+            }
+
+            /* MAP */
+            .map-container{
+            position:relative;
+            max-width:1000px;
+            margin:0 auto;
+            }
+
+            .map-container img{
+            width:100%;
+            border-radius:15px;
+            }
+
+            /* MARKERS */
+            .marker{
+            position:absolute;
+            transform:translate(-50%, -50%);
+            cursor:pointer;
+            font-size:22px;
+            animation:pulse 2s infinite;
+            }
+
+            .marker:hover{
+            transform:translate(-50%, -50%) scale(1.4);
+            }
+
+            @keyframes pulse{
+            0%{transform:translate(-50%, -50%) scale(1);}
+            50%{transform:translate(-50%, -50%) scale(1.2);}
+            100%{transform:translate(-50%, -50%) scale(1);}
+            }
+
+            /* TOOLTIP */
+            .tooltip{
+            position:absolute;
+            background:#fff;
+            padding:15px;
+            border-radius:10px;
+            box-shadow:0 5px 20px rgba(0,0,0,0.2);
+            display:none;
+            width:260px;
+            z-index:10;
+            }
+
+            /* FOOTER */
+            .footer{
+            text-align:center;
+            padding:20px;
+            background:#1e1e1e;
+            color:#fff;
+            margin-top:40px;
+        }
+
+      /* Footer*/
+      .footer {
+        background: #1e1e1e;
+        color: #fff;
+        padding: 40px 20px 10px;
+      }
+
+      .footer-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .footer-section h2,
+      .footer-section h3 {
+        margin-bottom: 10px;
+        color: #ff6b6b;
+      }
+
+      .footer-section p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .footer-section ul {
+        list-style: none;
+      }
+
+      .footer-section ul li {
+        margin: 8px 0;
+      }
+
+      .footer-section ul li a {
+        text-decoration: none;
+        color: #ccc;
+        transition: 0.3s;
+      }
+
+      .footer-section ul li a:hover {
+        color: #ff6b6b;
+        padding-left: 5px;
+      }
+
+      /* Social Icons */
+      .social {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .social a {
+        margin: 0 10px;
+        font-size: 20px;
+        text-decoration: none;
+        color: #fff;
+        transition: 0.3s;
+      }
+
+      .social a:hover {
+        color: #ff6b6b;
+        transform: scale(1.2);
+      }
+
+      /* Bottom */
+      .footer-bottom {
+        text-align: center;
+        font-size: 14px;
+        border-top: 1px solid #444;
+        padding-top: 10px;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="navbar">
+            <h2>🌍 Recipe Hub</h2>
+            <span>Famous Food Stores</span>
+        </div>
+
+        <div class="header">
+            <h1>Explore Famous Food Stores Around the World</h1>
+            <p>Click on icons to discover iconic dishes</p>
+        </div>
+
+        <div class="map-container">
+
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg">
+
+            <!-- MARKERS -->
+
+            <div class="marker" style="top:55%; left:65%;" onclick="showStore(event,'Karims')">🍛</div>
+            <div class="marker" style="top:45%; left:48%;" onclick="showStore(event,'Da Michele')">🍕</div>
+            <div class="marker" style="top:50%; left:75%;" onclick="showStore(event,'Din Tai Fung')">🥟</div>
+            <div class="marker" style="top:55%; left:25%;" onclick="showStore(event,'El Huequito')">🌮</div>
+            <div class="marker" style="top:43%; left:47%;" onclick="showStore(event,'Cafe de Flore')">☕</div>
+            <div class="marker" style="top:50%; left:85%;" onclick="showStore(event,'Sukiyabashi Jiro')">🍣</div>
+            <div class="marker" style="top:50%; left:30%;" onclick="showStore(event,'Shake Shack')">🍔</div>
+            <div class="marker" style="top:50%; left:80%;" onclick="showStore(event,'Gogung')">🍲</div>
+
+        </div>
+
+        <div class="tooltip" id="tooltip"></div>
+
+        <!-- FOOTER SECTION -->
+    <footer class="footer">
+      <div class="footer-container">
+
+        <!-- Brand -->
+        <div class="footer-section">
+          <h2>🍲 Recipe Hub</h2>
+          <p>Discover, cook & share your favorite recipes from around the world.</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="landingPage.html">Home</a></li>
+            <li><a href="landingPage.html#cuisines">Cuisines</a></li>
+            <li><a href="landingPage.html#liked-slider">Favorites</a></li>
+            <li><a href="contactUS.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Categories -->
+        <div class="footer-section">
+          <h3>Categories</h3>
+          <ul>
+            <li><a href="#">Indian</a></li>
+            <li><a href="#">Italian</a></li>
+            <li><a href="#">Chinese</a></li>
+            <li><a href="Desert.html">Desserts</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <p>Email: support@recipehub.com</p>
+          <p>Phone: +91 98765 43210</p>
+          <p>Location: India</p>
+        </div>
+
+      </div>
+
+      <!-- Social Icons -->
+      <div class="social">
+        <a href="#">🌐</a>
+        <a href="#">📘</a>
+        <a href="#">📸</a>
+        <a href="#">🐦</a>
+      </div>
+
+      <!-- Bottom -->
+      <div class="footer-bottom">
+        <p>© 2026 Recipe Hub | All Rights Reserved</p>
+      </div>
+    </footer>
+
+        <script>
+            const stores={
+                Karims:{
+                name:"Karim's",
+                place:"Delhi, India 🇮🇳",
+                food:"Mutton Korma & Biryani 🍛",
+                desc:"Legendary Mughlai restaurant near Jama Masjid."
+                },
+                "Da Michele":{
+                name:"L'Antica Pizzeria da Michele",
+                place:"Naples, Italy 🇮🇹",
+                food:"Classic Margherita Pizza 🍕",
+                desc:"World-famous pizza place since 1870."
+                },
+                "Din Tai Fung":{
+                name:"Din Tai Fung",
+                place:"Taipei, Taiwan 🇹🇼",
+                food:"Soup Dumplings (Xiao Long Bao) 🥟",
+                desc:"Globally loved dumpling restaurant."
+                },
+                "El Huequito":{
+                name:"El Huequito",
+                place:"Mexico City 🇲🇽",
+                food:"Tacos al Pastor 🌮",
+                desc:"Iconic taco street food spot."
+                },
+                "Cafe de Flore":{
+                name:"Café de Flore",
+                place:"Paris, France 🇫🇷",
+                food:"Coffee & Croissant ☕🥐",
+                desc:"Historic café loved by artists."
+                },
+                "Sukiyabashi Jiro":{
+                name:"Sukiyabashi Jiro",
+                place:"Tokyo, Japan 🇯🇵",
+                food:"Premium Sushi 🍣",
+                desc:"Michelin-star sushi restaurant."
+                },
+                "Shake Shack":{
+                name:"Shake Shack",
+                place:"New York, USA 🇺🇸",
+                food:"Cheeseburger 🍔",
+                desc:"Famous fast-casual burger chain."
+                },
+                "Gogung":{
+                name:"Gogung",
+                place:"Seoul, Korea 🇰🇷",
+                food:"Bibimbap 🍲",
+                desc:"Known for authentic Korean dishes."
+                }
+            };
+
+            function showStore(e,name){
+                let s=stores[name];
+                let tooltip=document.getElementById("tooltip");
+
+                tooltip.innerHTML=`
+                    <h3>${s.name}</h3>
+                    <p><b>${s.place}</b></p>
+                    <p><b>Famous For:</b> ${s.food}</p>
+                    <p>${s.desc}</p>
+                `;
+
+                tooltip.style.display="block";
+                tooltip.style.top=e.pageY+"px";
+                tooltip.style.left=e.pageX+"px";
+            }
+
+            window.onclick=e=>{
+                if(!e.target.classList.contains("marker")){
+                    document.getElementById("tooltip").style.display="none";
+                }
+            }
+        </script>
+
+    </body>
+</html>

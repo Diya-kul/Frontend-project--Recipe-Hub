@@ -1,0 +1,34 @@
+
+<!--
+SQL DATABASE (MySQL Example)
+
+CREATE DATABASE recipe_db;
+USE recipe_db;
+
+CREATE TABLE recipes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100),
+  image TEXT,
+  ingredients TEXT,
+  instructions TEXT
+);
+
+INSERT INTO recipes (name, image, ingredients, instructions)
+VALUES ('Pasta', 'image_url', 'flour, sauce', 'cook and mix');
+
+-- Fetch data
+SELECT * FROM recipes;
+
+-- Backend (Node.js idea)
+-- Use Express + MySQL to connect frontend with database
+
+GIT COMMANDS:
+
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin <repo-url>
+git push -u origin main
+
+-->

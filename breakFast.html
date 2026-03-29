@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breakfast Recipes</title>
+
+    <style>
+      body{
+        margin:0;
+        font-family:sans-serif;
+        background:#fff8f5;
+      }
+
+      /* NAVBAR */
+      .navbar{
+        position:sticky;
+        top:0;
+        background:#fff;
+        display:flex;
+        justify-content:space-between;
+        padding:15px 20px;
+        box-shadow:0 2px 10px rgba(0,0,0,0.1);
+      }
+
+      .navbar a{
+        margin:0 10px;
+        text-decoration:none;
+        color:#333;
+        font-weight:600;
+      }
+
+      .navbar h2{
+        float:right;
+      }
+
+      /* SEARCH */
+      .search{
+        text-align:center;
+        padding:20px;
+      }
+
+      .search input{
+        width:60%;
+        padding:12px;
+        border-radius:25px;
+        border:none;
+        box-shadow:0 2px 10px rgba(0,0,0,0.1);
+      }
+
+      /* CARDS */
+      .container{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+        gap:20px;
+        padding:20px;
+      }
+
+      .card{
+        background:#fff;
+        border-radius:15px;
+        overflow:hidden;
+        cursor:pointer;
+        transition:.3s;
+      }
+
+      .card img{
+        width:100%;
+        height:150px;
+        object-fit:cover;
+      }
+
+      .card h3{
+        padding:10px;
+      }
+
+      .card:hover{
+        transform:scale(1.05);
+      }
+
+      /* MODAL */
+      .modal{
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        display:none;
+        justify-content:center;
+        align-items:center;
+        background:rgba(0,0,0,0.6);
+      }
+
+      .modal-content{
+        background:#fff;
+        width:90%;
+        max-width:500px;
+        padding:20px;
+        border-radius:10px;
+        max-height:80vh;
+        overflow-y:auto;
+      }
+
+      .modal-content img{
+        width:100%;
+        border-radius:10px;
+      }
+
+      /* LIST */
+      ul{
+        text-align:left;
+      }
+
+      /* <!-- COOKING CTA + CATEGORY SECTION --> */
+      .cook-section {
+        padding: 60px 20px;
+        background: linear-gradient(120deg, #fff5f5, #ffecec);
+        text-align: center;
+      }
+
+      /* Heading */
+      .cook-header h2 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      .cook-header p {
+        margin-bottom: 30px;
+        color: #555;
+      }
+
+      /* Categories Grid */
+      .cook-categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+      }
+
+      /* Cards */
+      .cook-card {
+        background: #fff;
+        padding: 25px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: 0.4s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transform: translateY(30px);
+        opacity: 0;
+      }
+
+      /* Icon */
+      .cook-card span {
+        font-size: 2rem;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      /* Hover Effect */
+      .cook-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        background: #ff6b6b;
+        color: white;
+      }
+
+      /* Animation */
+      .cook-card.show {
+        transform: translateY(0);
+        opacity: 1;
+        transition: all 0.6s ease;
+      }
+
+      .suggestions{
+        padding:60px 20px;
+        background:linear-gradient(120deg,#fff5f5,#ffecec);
+        text-align:center;
+      }
+
+      .section-title{
+        font-size:2rem;
+        margin-bottom:10px;
+      }
+
+      .subtitle{
+        margin-bottom:30px;
+        color:#555;
+      }
+
+      /* SLIDER */
+      .slider-container{
+        overflow:hidden;
+      }
+
+      .slider-track{
+        display:flex;
+        gap:20px;
+        transition:transform 0.6s ease;
+      }
+
+      /* CARD */
+      .suggestion-card{
+        min-width:260px;
+        background:#fff;
+        border-radius:15px;
+        overflow:hidden;
+        transition:.4s;
+        opacity:0.5;
+        transform:scale(0.85);
+      }
+
+      .suggestion-card img{
+        width:100%;
+        height:150px;
+        object-fit:cover;
+      }
+
+      .content{
+        padding:15px;
+        font-size:14px;
+      }
+
+      .suggestion-card.active{
+        transform:scale(1.05);
+        opacity:1;
+        box-shadow:0 10px 25px rgba(0,0,0,0.2);
+      }
+
+      /* Footer*/
+      .footer {
+        background: #1e1e1e;
+        color: #fff;
+        padding: 40px 20px 10px;
+      }
+
+      .footer-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .footer-section h2,
+      .footer-section h3 {
+        margin-bottom: 10px;
+        color: #ff6b6b;
+      }
+
+      .footer-section p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .footer-section ul {
+        list-style: none;
+      }
+
+      .footer-section ul li {
+        margin: 8px 0;
+      }
+
+      .footer-section ul li a {
+        text-decoration: none;
+        color: #ccc;
+        transition: 0.3s;
+      }
+
+      .footer-section ul li a:hover {
+        color: #ff6b6b;
+        padding-left: 5px;
+      }
+
+      /* Social Icons */
+      .social {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .social a {
+        margin: 0 10px;
+        font-size: 20px;
+        text-decoration: none;
+        color: #fff;
+        transition: 0.3s;
+      }
+
+      .social a:hover {
+        color: #ff6b6b;
+        transform: scale(1.2);
+      }
+
+      /* Bottom */
+      .footer-bottom {
+        text-align: center;
+        font-size: 14px;
+        border-top: 1px solid #444;
+        padding-top: 10px;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+      <h1 href="landingPage.html">Recipe Hub</h1>
+      <h2>🥞 Breakfast Recipes</h2>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search">
+      <input type="text" id="search" placeholder="Search by ingredient..." onkeyup="searchRecipe()">
+    </div>
+
+    <!-- CARDS -->
+    <div class="container" id="recipes"></div>
+
+    <!-- MODAL -->
+    <div class="modal" id="modal">
+      <div class="modal-content" id="modalContent"></div>
+    </div>
+
+
+    <!-- SUGGESTIONS SLIDER WITH NUTRITION INFO -->
+    <section class="suggestions">
+        <h2 class="section-title">✨ Suggestions For You ✨</h2>
+        <p class="subtitle">Healthy foods with essential nutrients 🥗</p>
+
+        <div class="slider-container">
+          <div class="slider-track" id="sliderTrack">
+
+            <!-- Poha -->
+            <div class="suggestion-card">
+              <img src="BreakFast\Pooha.png">
+              <div class="content">
+                <h3>Poha</h3>
+                <p>🟢 Iron, Fiber<br>💪 Protein: 3g<br>🌿 Vitamins: B-complex</p>
+              </div>
+            </div>
+
+            <!-- Omelette -->
+            <div class="suggestion-card">
+              <img src="BreakFast\Omlette.png">
+              <div class="content">
+                <h3>Omelette</h3>
+                <p>🟢 Iron, Calcium<br>💪 Protein: 6g<br>🌿 Vitamins: A, D, B12</p>
+              </div>
+            </div>
+
+            <!-- Arroz Caldo -->
+            <div class="suggestion-card">
+              <img src="BreakFast\Arroz CaldoCaldo.png">
+              <div class="content">
+                <h3>Arroz Caldo</h3>
+                <p>🟢 Zinc, Iron<br>💪 Protein: 5g<br>🌿 Vitamins: B6</p>
+              </div>
+            </div>
+
+            <!-- Tapsilog -->
+            <div class="suggestion-card">
+              <img src="BreakFast\Tapsilog.png">
+              <div class="content">
+                <h3>Tapsilog</h3>
+                <p>🟢 Iron, Potassium<br>💪 Protein: 12g<br>🌿 Vitamins: B12</p>
+              </div>
+            </div>
+
+            <!-- Doujiang -->
+            <div class="suggestion-card">
+              <img src="BreakFast\soya Milk.png">
+              <div class="content">
+                <h3>Doujiang</h3>
+                <p>🟢 Calcium, Magnesium<br>💪 Protein: 7g<br>🌿 Vitamins: B-complex</p>
+              </div>
+            </div>
+
+            <!-- Congee -->
+            <div class="suggestion-card">
+              <img src="BreakFast\Congee.png">
+              <div class="content">
+                <h3>Congee</h3>
+                <p>🟢 Sodium, Iron<br>💪 Protein: 2g<br>🌿 Vitamins: B1</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+      <!-- Categories -->
+      <div class="cook-categories">
+
+        <div class="cook-card">
+          <span>🥞</span>
+          <h3>Breakfast</h3>
+        </div>
+
+        <div class="cook-card">
+          <span>🥗</span>
+          <h3>Diet Food</h3>
+        </div>
+
+        <div class="cook-card">
+          <span>🍛</span>
+          <h3>Lunch</h3>
+        </div>
+
+        <div class="cook-card">
+          <span>🥪</span>
+          <h3>Brunch</h3>
+        </div>
+
+        <div class="cook-card">
+          <span>🍲</span>
+          <h3>Dinner</h3>
+        </div>
+
+        <div class="cook-card">
+          <span>🍰</span>
+          <h3>Desserts</h3>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FOOTER SECTION -->
+    <footer class="footer">
+      <div class="footer-container">
+
+        <!-- Brand -->
+        <div class="footer-section">
+          <h2>🍲 Recipe Hub</h2>
+          <p>Discover, cook & share your favorite recipes from around the world.</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="landingPage.html">Home</a></li>
+            <li><a href="landingPage.html#cuisines">Cuisines</a></li>
+            <li><a href="landingPage.html#liked-slider">Favorites</a></li>
+            <li><a href="contactUS.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Categories -->
+        <div class="footer-section">
+          <h3>Categories</h3>
+          <ul>
+            <li><a href="#">Indian</a></li>
+            <li><a href="#">Italian</a></li>
+            <li><a href="#">Chinese</a></li>
+            <li><a href="Desert.html">Desserts</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <p>Email: support@recipehub.com</p>
+          <p>Phone: +91 98765 43210</p>
+          <p>Location: India</p>
+        </div>
+
+      </div>
+
+      <!-- Social Icons -->
+      <div class="social">
+        <a href="#">🌐</a>
+        <a href="#">📘</a>
+        <a href="#">📸</a>
+        <a href="#">🐦</a>
+      </div>
+
+      <!-- Bottom -->
+      <div class="footer-bottom">
+        <p>© 2026 Recipe Hub | All Rights Reserved</p>
+      </div>
+    </footer>
+  </body>
+
+  <script>
+  const recipes=[
+  {
+  name:"Pancakes",
+  img:"BreakFast/pancake.png",
+  ingredients:["1 cup flour", "2 tbsp sugar", "1 tsp baking powder", "1 cup milk", "1 egg", "2 tbsp melted butter", "Pinch of salt"],
+  steps:["In a bowl, mix flour, sugar, baking powder, and salt. In another bowl, whisk milk, egg, and melted butter. Combine wet and dry ingredients to make a smooth batter. Heat a pan and pour a ladle of batter.Cook until bubbles form, flip and cook other side. Serve hot with syrup or honey."]
+  },
+  {
+  name:"Omelette",
+  img:"BreakFast/Omlette.png",
+  ingredients:["2 eggs","2 tbsp chopped onion","2 tbsp chopped tomato","1 green chili (optional)","Salt and pepper","1 tsp oil or butter" ],
+
+  steps: "Beat eggs in a bowl. Add onion, tomato, chili, salt, and pepper. Heat oil in a pan. Pour the egg mixture. Cook on medium heat until set, flip if needed. Fold and serve hot."
+  },
+  {
+  name:"Poha",
+  img:"BreakFast/Pooha.png",
+  ingredients:["1 cup poha (flattened rice)","1 chopped onion","1 green chili", "1/2 tsp mustard seeds","Curry leaves", "1/4 tsp turmeric","Salt","Lemon juice","Peanuts (optional)","Oil"],
+  steps:"Wash poha lightly and keep aside.Heat oil, add mustard seeds and let them crackle.Add curry leaves, chili, onion, and peanuts.Cook till onions become soft.Add turmeric and salt.Add poha and mix gently.Cook for 2–3 minutes.Add lemon juice and serve."
+  },
+
+  {
+  name:"Youtiao and Doujiang",
+  img:"BreakFast/youtiao&duojiang.png",
+  ingredients:["2 cups flour", "1 tsp baking powder", "1/2 tsp salt", "Water", "Oil for frying"],
+  steps:"Mix flour, baking powder, and salt. Add water to make a soft dough. Rest dough for 2–3 hours. Roll and cut into strips. Deep fry until golden and crispy. Serve hot.."
+  },
+  {
+  name:"Sandwich",
+  img:"BreakFast/sandwich.png",
+  ingredients:["Bread slices","Butter or mayonnaise","Cucumber slices","Tomato slices","Boiled potato (optional)","Salt and pepper","Cheese (optional)"],
+  steps:"Spread butter/mayo on bread slices.Place cucumber, tomato, and potato slices.Sprinkle salt and pepper.Add cheese if you like.Cover with another bread slice.Cut and serve (toast if preferred)."
+  },
+  {
+  name:"Congee",
+  img:"BreakFast/Congee.png",
+  ingredients:["1/2 cup rice", "4-5 cups water", "Salt", "Ginger (optional)", "Spring onions (optional)", "Soy sauce (optional)"],
+  steps:"Wash the rice thoroughly.Add rice and water to a pot.Cook on low heat, stirring occasionally.Let it simmer until rice becomes soft and porridge-like.Add salt and optional toppings like ginger or spring onions.Serve hot."
+  },
+  {
+  name:"Baozi and Jiaozi",
+  img:"BreakFast/Baozi and Jiaozi.png",
+  ingredients:["2 cups flour", "1 tsp yeast", "Sugar", "Water", "Minced meat/vegetables filling"],
+  steps:"Prepare dough with flour, yeast, sugar, and water. Let it rise until doubled. Roll into small circles. Add filling in center. Seal and shape into buns. Steam for 15–20 minutes."
+  },
+  {
+  name:"Jianbing",
+  img:"BreakFast/Jianbing.png",
+  ingredients:["1/2 cup flour", "Water", "Egg", "Spring onions", "Crispy wonton/cracker", "Sauce"],
+  steps:"Make a thin batter with flour and water. Pour on hot flat pan and spread thin. Crack an egg on top and spread. Add onions and sauce. Place crispy cracker inside. Fold and serve hot."
+  },
+  {
+  name:"Doujiang (Soy Milk)",
+  img:"BreakFast/soya Milk.png",
+  ingredients:["1 cup soybeans", "Water", "Sugar (optional)"],
+  steps:"Soak soybeans overnight. Blend with water. Strain the mixture. Boil the liquid for 10–15 minutes. Add sugar if desired. Serve warm."
+  },
+  {
+  name:"Ichiju-Sansai - Japan",
+  img:"BreakFast/Ichiju-Sansai.png",
+  ingredients: ["Cooked rice", "Miso soup", "Grilled fish", "Pickled vegetables", "Seaweed", "Tofu"],
+  steps:"Cook rice and keep warm. Prepare miso soup with tofu and seaweed. Grill fish until cooked. Arrange rice, soup, fish, and sides on a tray. Serve as a balanced meal."
+  },
+  {
+  name:"Bibimbap",
+  img:"BreakFast/Bibimbap.png",
+  ingredients:["Cooked rice", "Mixed vegetables (carrot, spinach, cucumber)", "Fried egg", "Cooked beef (optional)", "Gochujang (chili paste)", "Sesame oil", "Sesame seeds"],
+  steps:"Place cooked rice in a bowl. Arrange vegetables on top. Add cooked beef (optional). Place fried egg in center. Add gochujang and drizzle sesame oil. Mix everything before eating."
+  },
+  {
+  name:"Gyeran-bap (Egg Rice)",
+  img:"BreakFast/You said Gyeran-bap.png",
+  ingredients:["Hot rice", "Egg", "Soy sauce", "Sesame oil", "Butter (optional)", "Spring onions"],
+  steps:"Place hot rice in a bowl. Crack a raw or lightly cooked egg on top. Add soy sauce and sesame oil. Mix well so egg cooks from heat of rice. Garnish with spring onions and serve."
+  },
+  {name:"Korean Toast (Street Style)",
+  img:"BreakFast/Korean Toast .png",
+  ingredients:["Bread slices", "Egg", "Cabbage (shredded)", "Carrot (shredded)", "Sugar", "Ketchup", "Mayonnaise", "Butter"],
+  steps:"Mix egg with cabbage and carrot. Cook mixture like an omelette on pan. Toast bread with butter. Place omelette between bread slices. Add sugar, ketchup, and mayo. Serve hot."
+  },
+  {
+  name:"Tapsilog",
+  img:"BreakFast/Tapsilog.png",
+  ingredients:["Rice", "Beef tapa (marinated beef)", "Fried egg", "Garlic", "Oil"],
+  steps:"Fry garlic and mix with rice to make garlic rice. Cook marinated beef until tender. Fry egg sunny-side up. Serve rice with beef and egg."
+  },
+  {
+  name:"Arroz Caldo",
+  img:"BreakFast/Arroz CaldoCaldo.png",
+  ingredients:["Rice", "Chicken", "Garlic", "Ginger", "Onion", "Fish sauce", "Water or broth", "Boiled egg", "Spring onions"],
+  steps:" Sauté garlic, ginger, and onion. Add chicken and cook slightly. Add rice and water/broth. Simmer until porridge-like consistency. Add fish sauce for flavor. Serve with boiled egg and spring onions."
+  },
+  {
+  name:"Noodle Soups",
+  img:"BreakFast/Noodle Soups.png",
+  ingredients:["Noodles", "Broth", "Vegetables", "Protein (chicken/egg/tofu)", "Garlic", "Soy sauce", "Spices"],
+  steps:"Prepare broth with garlic and spices. Add vegetables and protein. Cook noodles separately or in broth. Combine everything and simmer. Serve hot."
+  },
+  {
+  name:"Kaya Toast (Malaysia/Singapore)",
+  img:"BreakFast/Kaya Toast.png",
+  ingredients:["Bread slices", "Kaya (coconut jam)", "Butter", "Eggs", "Soy sauce", "Pepper"],
+  steps:"Toast bread until crispy. Spread kaya and butter inside. Soft-boil eggs separately. Serve toast with eggs, soy sauce, and pepper."
+  },
+  {
+  name:"Le Petit Déjeuner (French Breakfast)",
+  img:"BreakFast/(French Breakfast.png",
+  ingredients:["Croissant or baguette", "Butter", "Jam", "Coffee or tea", "Juice"],
+  steps:"Serve fresh croissant or baguette. Add butter and jam. Pair with coffee or tea and juice. Serve simple and light."
+  }
+  ];
+
+  function display(data){
+    const box=document.getElementById("recipes");
+    box.innerHTML="";
+    data.forEach(r=>{
+      box.innerHTML+=`
+      <div class="card" onclick="openModal('${r.name}')">
+        <img src="${r.img}">
+        <h3>${r.name}</h3>
+      </div>`;
+    });
+  }
+
+  function searchRecipe(){
+    let val=document.getElementById("search").value.toLowerCase();
+    let filtered=recipes.filter(r=>
+      r.ingredients.join(" ").toLowerCase().includes(val)
+    );
+    display(filtered);
+  }
+
+  function openModal(name){
+    const recipe=recipes.find(r=>r.name===name);
+    document.getElementById("modal").style.display="flex";
+    document.getElementById("modalContent").innerHTML=`
+      <h2>${recipe.name}</h2>
+      <img src="${recipe.img}">
+      <h3>Ingredients:</h3>
+      <ul>${recipe.ingredients.map(i=>`<li>${i}</li>`).join("")}</ul>
+      <h3>Procedure:</h3>
+      <p>${recipe.steps}</p>
+    `;
+  }
+
+  window.onclick=e=>{
+    if(e.target.id==="modal"){
+      document.getElementById("modal").style.display="none";
+    }
+  }
+
+  display(recipes);
+
+  const track = document.getElementById("sliderTrack");
+  const cards = document.querySelectorAll(".suggestion-card");
+
+  let index = 1;
+
+  function updateSlider(){
+    cards.forEach(c=>c.classList.remove("active"));
+    cards[index].classList.add("active");
+
+    const offset = cards[index].offsetLeft - (window.innerWidth/2) + 150;
+    track.style.transform = `translateX(-${offset}px)`;
+  }
+
+  setInterval(()=>{
+    index++;
+    if(index >= cards.length-1) index = 1;
+    updateSlider();
+  },3000);
+
+  window.onload = updateSlider;
+
+  </script>
+</html>
